@@ -1,0 +1,86 @@
+import javax.tools.JavaCompiler
+
+
+apply plugin :'java'
+apply plugin :'war'
+apply plugin :"idea"
+apply plugin :"maven"
+apply plugin :'org.akhikhl.gretty'
+
+//
+//plugins {
+//    id 'java'
+//    id 'war'
+//}
+
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:2.0.0'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+if (!project.plugins.findPlugin(org.akhikhl.gretty.GrettyPlugin))
+    project.apply(plugin: org.akhikhl.gretty.GrettyPlugin)
+gretty {
+    httpPort = 8080
+    contextPath = '/MyGradleWeb'
+    // ... many more properties
+    host = "loclahost" //服务器地址
+    httpEnabled = true  //开启http协议
+    servletContainer = "tomcat8" //容器 默认不是tomcat 我们改成tomcat
+    scanInterval = 1 //热部署 可以不配 已经配过了  每秒钟检测 修改了就立刻生效
+      //每秒钟执行一次 就不用重启了
+    fastReload = true //和上面一起的
+    loggingLevel = "DEBUG" //日志级别
+    consoleLogEnabled = true //控制台显示
+
+    //配置调试
+    debugPort = 8888//（不配默认就是5005）
+    debugSuspend = true   //挂起
+
+}
+
+group 'org.zq'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+////私服
+//dependencies {
+//    repositories {
+//        maven{
+//            url : XXXXX
+//        }
+//    }
+//}
+
+dependencies {
+//    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+//    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    implementation group: 'org.mybatis', name: 'mybatis', version: '3.4.6'
+}
+
+//tasks.withType(JavaCompiler){ //java编译时的编码 utf-8
+//    options.encoding = "UTF-8"
+//}
+//tasks.withType(JavaCompiler){ //java编译时的编码 utf-8
+//    options.encoding = "UTF-8"
+//}
+//
+//////测试时编码
+//[compileJava,javadoc,compileTestJava]*.options*.encoding= "UTF-8"
